@@ -18,4 +18,15 @@ def get_requirements()->List[str]:
         except FileNotFoundError:
                 print("requirements.txt file not found")
         return requirement_lst
-print(get_requirements())
+# print(get_requirements())
+
+# Set meta data
+
+setup(
+        name='NetworkSecurity',
+        version='0.0.1',
+        author='Vidyanshu Kushawaha',
+        author_email='vidyanshukushawaha@gmail.com',
+        packages=find_packages(),
+        install_requires=get_requirements()
+)
