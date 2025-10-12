@@ -2,3 +2,5 @@ venv
 .env
 logs
 Artifact
+mlruns
+final_model
