@@ -4,3 +4,5 @@ logs
 Artifact
 mlruns
 final_model
+z.py
+main.py

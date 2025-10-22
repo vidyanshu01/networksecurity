@@ -27,8 +27,7 @@ warnings.filterwarnings('ignore')
 
 import mlflow
 import mlflow.sklearn
-mlflow.autolog()
-
+import dagshub
 
 class ModelTrainer:
     def __init__(self,model_trainer_config:ModelTrainerConfig,data_transformation_artifact:DataTransformationArtifact):
@@ -41,12 +40,17 @@ class ModelTrainer:
             raise NetworkSecurityException(e,sys)
         
     def track_mlflow(self,best_model,classificationmetric,X_train):
+        
+        dagshub.init(repo_owner='vidyanshu01', repo_name='networksecurity', mlflow=True)
 
         # Set MLflow tracking URI to local file storage to avoid unsupported endpoint error
-        mlflow.set_tracking_uri("file:///C:/Users/dell/OneDrive/Desktop/DATASCIENCE&ML/Projects/NetworkSecuritys/mlruns")
+        # mlflow.set_tracking_uri("file:///C:/Users/dell/OneDrive/Desktop/DATASCIENCE&ML/Projects/NetworkSecuritys/mlruns")
 
+        mlflow.set_tracking_uri("https://dagshub.com/vidyanshu01/networksecurity.mlflow")
+        mlflow.sklearn.autolog()
+        logging.info("Tracking MLflow run on DagsHub")
+        mlflow.set_experiment("NetworkSecurity_Experiment")
 
-        logging.info("Starting MLFLOW ")
         with mlflow.start_run():
             f1_score = classificationmetric.f1_score
             precision_score = classificationmetric.precision_score
@@ -58,7 +62,8 @@ class ModelTrainer:
             mlflow.log_metric(key="f1_score", value=f1_score)
             mlflow.log_metric(key="precision", value=precision_score)
             mlflow.log_metric(key="recall_score", value=recall_score)
-            mlflow.sklearn.log_model(best_model, name="model", input_example=X_train[:1])
+            mlflow.sklearn.log_model(best_model, "model", input_example=X_train[:1])
+            # mlflow.sklearn.log_model(best_model, name="model", input_example=X_train[:1])
 
         
     def train_model(self, X_train: np.ndarray, y_train: np.ndarray, x_test: np.ndarray, y_test: np.ndarray) -> ModelTrainerArtifact:
@@ -83,9 +88,9 @@ class ModelTrainer:
             "Gradient Boosting":{
                 'loss':['log_loss', 'exponential'],
                 'learning_rate':[.1,.01,.05,.001],
-                # 'subsample':[0.6,0.7,0.75,0.85,0.9],
-                # 'criterion':['squared_error', 'friedman_mse'],
-                # 'max_features':['auto','sqrt','log2'],
+                'subsample':[0.6,0.7,0.75,0.85,0.9],
+                'criterion':['squared_error', 'friedman_mse'],
+                'max_features':['auto','sqrt','log2'],
                 'n_estimators': [8,16,32,64,128,256]
             },
             "Logistic Regression":{},
