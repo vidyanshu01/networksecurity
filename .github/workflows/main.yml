@@ -99,6 +99,7 @@ jobs:
         run: |
           docker system prune -af
           docker volume prune -f
+          docker builder prune -af
 
       - name: Pull latest Docker image
         run: |
