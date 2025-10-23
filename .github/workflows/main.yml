@@ -57,8 +57,8 @@ jobs:
 
       - name: Debug ECR variables
         run: |
-          echo "Registry: ${{ steps.login-ecr.outputs.registry }}"
-          echo "Repository: ${{ secrets.ECR_REPOSITORY_NAME }}"
+          echo "Registry: '${{ steps.login-ecr.outputs.registry }}'"
+          echo "Repository: '${{ secrets.ECR_REPOSITORY_NAME }}'"
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
@@ -66,12 +66,13 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
+          # fallback to hardcoded registry if output is empty
+          tags: ${{ steps.login-ecr.outputs.registry || '045400793826.dkr.ecr.us-east-1.amazonaws.com' }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
         id: build-image
 
       - name: Set output image
         run: |
-          echo "image=${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest" >> $GITHUB_OUTPUT
+          echo "image=${{ steps.login-ecr.outputs.registry || '045400793826.dkr.ecr.us-east-1.amazonaws.com' }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest" >> $GITHUB_OUTPUT
 
   # -------------------------
   # Continuous Deployment
@@ -92,11 +93,12 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Login to Amazon ECR
+        id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: Pull latest Docker image
         run: |
-          docker pull ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
+          docker pull ${{ steps.login-ecr.outputs.registry || '045400793826.dkr.ecr.us-east-1.amazonaws.com' }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
 
       - name: Stop and remove old container
         run: |
@@ -111,7 +113,7 @@ jobs:
             -e "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" \
             -e "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" \
             -e "AWS_REGION=${{ secrets.AWS_REGION }}" \
-            ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
+            ${{ steps.login-ecr.outputs.registry || '045400793826.dkr.ecr.us-east-1.amazonaws.com' }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
 
       - name: Clean unused Docker resources
         run: docker system prune -f
