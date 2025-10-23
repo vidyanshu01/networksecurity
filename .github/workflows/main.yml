@@ -95,22 +95,10 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
       
-      - name: Clean Docker disk
+      - name: Pull latest images
         run: |
-          docker system prune -af
-          docker volume prune -f
-          docker builder prune -af
-
-      - name: Pull latest Docker image
-        run: |
-          docker pull ${{ steps.login-ecr.outputs.registry || '045400793826.dkr.ecr.us-east-1.amazonaws.com' }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
-
-      - name: Stop and remove old container
-        run: |
-          if docker ps -q --filter "name=networksecurity" | grep -q .; then
-            docker stop networksecurity
-            docker rm -fv networksecurity
-          fi
+          docker pull ${{secrets.AWS_ECR_LOGIN_URI}}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
+       
 
       - name: Run Docker container
         run: |
