@@ -95,11 +95,14 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
       
-      - name: Pull latest images
-        run: |
-          docker pull ${{secrets.AWS_ECR_LOGIN_URI}}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
-       
+      - name: Push image
+        uses: docker/build-push-action@v4
+        with:
+          push: true
+          tags: ${{ secrets.AWS_ECR_LOGIN_URI }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
 
+      - name: Pull latest image
+        run: docker pull ${{ secrets.AWS_ECR_LOGIN_URI }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
       - name: Run Docker container
         run: |
           docker run -d -p 8080:8080 --ipc="host" --name=networksecurity \
