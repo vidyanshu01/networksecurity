@@ -103,11 +103,12 @@ jobs:
   #       run: |
   #        docker system prune -f
 
-  
+
   Continuous-Deployment:
 
     needs: build-and-push-ecr-image
-    runs-on: [self-hosted, ip-172-31-15-49]
+    runs-on: [self-hosted, label-1]
+
 
     steps:
       - name: Checkout
