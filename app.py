@@ -85,6 +85,7 @@ async def predict_route(request: Request,file:UploadFile=File(...)):
 
         y_pred = network_model.predict(df)
         print("Prediction complete:", y_pred[:5])
+        
         df["predicted_column"] = y_pred
         df.to_csv("Prediction_output/output.csv", index=False)
         print("Output saved successfully")
