@@ -1,0 +1,20 @@
+Metadata-Version: 2.4
+Name: NetworkSecuritys
+Version: 0.0.1
+Author: Vidyanshu Kushawaha
+Author-email: vidyanshukushawaha@gmail.com
+Requires-Dist: python-dotenv
+Requires-Dist: numpy
+Requires-Dist: pandas
+Requires-Dist: matplotlib
+Requires-Dist: certifi
+Requires-Dist: pymongo
+Requires-Dist: dill
+Requires-Dist: pyaml
+Requires-Dist: mlflow
+Requires-Dist: dagshub
+Requires-Dist: fastapi
+Requires-Dist: unicorn
+Dynamic: author
+Dynamic: author-email
+Dynamic: requires-dist

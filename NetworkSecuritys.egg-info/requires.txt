@@ -1,0 +1,12 @@
+python-dotenv
+numpy
+pandas
+matplotlib
+certifi
+pymongo
+dill
+pyaml
+mlflow
+dagshub
+fastapi
+unicorn
