@@ -2,5 +2,6 @@ venv
 .env
 logs
 Artifact
+
 final_model
 Prediction_output
