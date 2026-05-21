@@ -43,6 +43,9 @@ Data Handling: Pandas, NumPy
 
 Deployment Ready: AWS / Cloud compatible
 
+
+
+
 📂 Project Structure
 networksecurity/
 │
@@ -61,6 +64,10 @@ networksecurity/
 ├── Dockerfile              # Docker configuration
 ├── README.md               # Project documentation
 └── .gitignore
+
+
+
+
 
 ⚙️ Installation & Setup
 1️⃣ Clone the Repository
