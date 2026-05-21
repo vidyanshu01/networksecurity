@@ -45,8 +45,7 @@ Deployment Ready: AWS / Cloud compatible
 
 
 
-
-📂 Project Structure
+ Project Structure
 networksecurity/
 │
 ├── networksecurity/        # Core application logic
